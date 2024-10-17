@@ -6,3 +6,10 @@ psycopg2-binary
 django-environ
 drf-yasg
 python-dateutil
+
+# MongoDB
+pymongo
+# AWS SDK
+boto3
+firebase-admin
+werkzeug
