@@ -1,51 +1,59 @@
-from typing import List
+from typing import List, Optional
+from pydantic import BaseModel, Field
+from bson import ObjectId
 
 
-class UserProfileSchema:
+
+class UserProfileSchema(BaseModel):
     """
-    Schema representation for a user profile in MongoDB.
+    Schema representation for a user profile in MongoDB, with validation.
     """
 
-    def __init__(self, username:str, email:str, first_name:str, last_name:str, password:str, phone_number:str, medical_qualifications:List, longitude:float, latitude:float):
-        self.username = username
-        self.email = email
-        self.password = password
-        self.first_name = first_name
-        self.last_name = last_name
-        self.phone_number = phone_number
-        self.medical_qualifications = medical_qualifications
-        self.longitude = longitude
-        self.latitude = latitude
-        self.admin_verification = True
+    username: str
+    email: str
+    password: str
+    first_name: str
+    last_name: str
+    phone_number: str
+    medical_qualifications: List[str]
+    longitude: float
+    latitude: float
+    admin_verification: bool = True
 
+    class Config:
+        """
+        Configuration settings for Pydantic model.
+        """
+        arbitrary_types_allowed = True
 
     def to_dict(self):
         """
         Convert the schema instance to a dictionary for MongoDB insertion.
         """
+        return self.dict()
 
-        return {
-            "username": self.username,
-            "email": self.email,
-            "password": self.password, 
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "phone_number": self.phone_number,
-            "medical_qualifications":self.medical_qualifications,
-            "admin-verification":self.admin_verification,
-            "location": {"longitude": self.longitude, "latitude": self.latitude}
-        }
 
-    @staticmethod
-    def validate(data):
+
+class Location(BaseModel):
+    latitude: float
+    longitude: float
+
+class EmergencyReport(BaseModel):
+    victim_name: Optional[str] = None
+    description: str
+    latitude: float
+    longitude: float
+    remark: str
+    is_active: bool
+    diagnosis: Optional[str] = None
+    chat_id: str
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def to_dict(self):
         """
-        Validate the data before inserting into the database.
+        Convert the schema instance to a dictionary for MongoDB insertion.
         """
-        if not isinstance(data.get("username"), str):
-            raise ValueError("Username must be a string.")
-        if not isinstance(data.get("email"), str):
-            raise ValueError("Email must be a string.")
-        # Additional validation can be added here
-
-        return True
+        return self.dict()
 

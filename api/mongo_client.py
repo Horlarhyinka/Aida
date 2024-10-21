@@ -14,3 +14,6 @@ def create_client():
     except Exception as err:
         print(err)
         raise err
+
+mongodb_client = create_client()
+aida_db = mongodb_client['aida-db']
