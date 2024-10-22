@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, Field
 from bson import ObjectId
@@ -34,9 +35,6 @@ class UserProfileSchema(BaseModel):
 
 
 
-class Location(BaseModel):
-    latitude: float
-    longitude: float
 
 class EmergencyReport(BaseModel):
     victim_name: Optional[str] = None
@@ -46,7 +44,7 @@ class EmergencyReport(BaseModel):
     remark: str
     is_active: bool
     diagnosis: Optional[str] = None
-    chat_id: str
+    created_at: datetime = datetime.now()
 
     class Config:
         arbitrary_types_allowed = True
@@ -57,3 +55,15 @@ class EmergencyReport(BaseModel):
         """
         return self.dict()
 
+
+class ChatMessage(BaseModel):
+    user_id: str
+    message: str
+    timestamp: Optional[datetime] = datetime.now()
+    sender_name: Optional[str] = None
+
+    def to_dict(self):
+        """
+        Convert the schema instance to a dictionary for MongoDB insertion.
+        """
+        return self.dict()

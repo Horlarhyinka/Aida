@@ -1,9 +1,11 @@
 # from rest_framework.permissions import IsAuthenticated
 from werkzeug.security import generate_password_hash, check_password_hash
-from api.mongo_client import client
+from api import mongo_client
+from api.mongo_client import mongodb_client
 from api.util.token import get_token_user_id
 from bson import ObjectId
 
+client = mongodb_client
 
 def authenticate_user(username, password) -> str | None:
     # Fetch the user from MongoDB

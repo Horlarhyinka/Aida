@@ -1,8 +1,9 @@
 from django.contrib.auth.backends import BaseBackend
-from api.mongo_client import client
+from api.mongo_client import mongodb_client
 from api.util.token import extract_access_token, get_token_user_id 
 from bson import ObjectId
 
+client = mongodb_client
 class MongoAuthenticationBackend(BaseBackend):
     def authenticate(self, request, user_id=None, **kwargs):
         try:

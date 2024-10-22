@@ -3,9 +3,11 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name="index"),
-    path('api/login/volunteer', views.login, name="login"),
-    path('api/register/volunteer', views.register, name="register"),
-    path('api/emergency/report', views.make_emergency_report, name="emergency_report"),
-    # path('api/emergency/response', views.get_emergency_response, name="emergency_response"),
-    path('api/volunteer/accept', views.respond_to_emergency, name="accept_request"),
+    path('login/volunteer', views.login, name="login"),
+    path('register/volunteer', views.register, name="register"),
+    path('emergency/report', views.make_emergency_report, name="emergency_report"),
+    path('emergency/<str:emergency_id>', views.get_emergency_report, name="emergency_response"),
+    path('volunteer/accept/<str:emergency_id>', views.respond_to_emergency, name="accept_request"),
+    path('responders/<str:emergency_id>', views.responders_list, name="responders_list"),
+    path('chat/messages/<str:emergency_id>', views.chat_messages.as_view(), name="chat_messages"),
 ]
