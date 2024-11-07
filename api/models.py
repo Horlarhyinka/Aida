@@ -31,7 +31,7 @@ class UserProfileSchema(BaseModel):
         """
         Convert the schema instance to a dictionary for MongoDB insertion.
         """
-        return self.dict()
+        return self.model_dump()
 
 
 
@@ -53,7 +53,7 @@ class EmergencyReport(BaseModel):
         """
         Convert the schema instance to a dictionary for MongoDB insertion.
         """
-        return self.dict()
+        return self.model_dump()
 
 
 class ChatMessage(BaseModel):
@@ -66,4 +66,4 @@ class ChatMessage(BaseModel):
         """
         Convert the schema instance to a dictionary for MongoDB insertion.
         """
-        return self.dict()
+        return self.model_dump()

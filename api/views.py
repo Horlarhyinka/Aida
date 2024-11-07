@@ -12,11 +12,14 @@ from rest_framework.decorators import api_view, permission_classes
 from . mongo_client import mongodb_client
 from .models import UserProfileSchema, EmergencyReport, ChatMessage
 from api.util.token import generate_user_token, get_token_user_id
+from api.util.location import get_location_from_ip
 from api.auth.user import authenticate_user, IsAuthenticated
 from werkzeug.security import generate_password_hash
 from bson import ObjectId
 from api.firestore import firestore_db, firestore 
 from datetime import datetime
+from ipware import get_client_ip
+import requests
 
 client = mongodb_client
 
@@ -89,6 +92,14 @@ def make_emergency_report(self):
       "emergency_id": "abc123"
     }
     try:
+        if data.get("location", None) == None or data.get("location", None) == None:
+            ip_address = get_client_ip(requests)
+            location = get_location_from_ip(ip_address)
+            if location:
+                data['longitude'] = location['longitude']
+                data['latitude'] = location['latitude']
+            
+
         new_report = EmergencyReport(**data)
         report_collection = client["aida-db"]["EmergencyReport"]
         emergency_id = report_collection.insert_one(new_report.to_dict()).inserted_id
@@ -174,7 +185,8 @@ def get_chat_messages(self, emergency_id):
             results.append(message.to_dict())
         if not results:
             raise ValueError("Invalid Emergency ID received!")
-        return Response(results, status=status.HTTP_200_OK)
+        totalCount = len(results) - 1
+        return Response({"chat_messages":results, "totalCount":totalCount}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 

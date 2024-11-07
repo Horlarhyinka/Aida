@@ -7,6 +7,9 @@ django-environ
 drf-yasg
 python-dateutil
 pydantic==2.9.2
+requests
+ipstack
+django-ipware
 
 # MongoDB
 pymongo
