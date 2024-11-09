@@ -6,11 +6,11 @@ import '@fontsource/outfit';  // This will load the Outfit font globally
 // 1. Define the color palette
 const colors = {
   primary: {
-    100: "#1DA1F20A",
-    200: "#A1CFFF",
-    300: "#72B7FF",
+    100: "#1DA1F20A",//G
+    200: "#F5FAFE",//G
+    300: "#2196F31A",
     400: "#43A0FF",
-    500: "#1DA1F2", // Trust color
+    500: "#1DA1F2", // Trust color (G)
     600: "#0E6BA8",
     700: "#085187",
     800: "#053A66",
