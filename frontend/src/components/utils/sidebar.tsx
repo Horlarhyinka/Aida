@@ -26,7 +26,7 @@ const SideBar = () =>{
         {label: 'Help center', path: '/help', icon: helpNavIcn},
         {label: 'Report', path: '/report', icon: reportNavIcn}
     ]
-    return <VStack spacing={'184px'} align={'left'} w='350px' h='100vh' py='48px' borderRight={'4px solid #2196F31A'} pos={'fixed'} >
+    return <VStack bg={'white'} spacing={'184px'} align={'left'} w='350px' h='100vh' py='48px' borderRight={'4px solid #2196F31A'} pos={'fixed'} >
         <VStack spacing={'48px'} align={'left'} >
             <Box w='100%' textAlign={'left'} >
         <Image display={'inline'} alignSelf={'flex-start'} src={Logo} alt={'logo'} />
