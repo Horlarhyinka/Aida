@@ -189,6 +189,24 @@ def get_emergency_report(self, emergency_id):
     except Exception as e:
         return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+#Ask AI to analyze the report
+@api_view(["GET"])
+def ai_response(self, emergency_id):
+    try:
+        report = client["aida-db"]["EmergencyReport"]
+
+        #!!!!!!!!!!   Emergency Report from MongoDB
+        the_report = report.find_one({"_id":ObjectId(emergency_id)})
+        #!!!!!!!!!!   Code to analyze the_report
+        pass
+
+
+    except Exception as e:
+        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+
+
 @api_view(["GET"])
 def responders_list(self, emergency_id):
     try:
