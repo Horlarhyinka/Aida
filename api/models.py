@@ -38,6 +38,7 @@ class UserProfileSchema(BaseModel):
 
 class EmergencyReport(BaseModel):
     victim_name: Optional[str] = None
+    reporter_name: Optional[str]
     description: str
     latitude: float
     longitude: float
