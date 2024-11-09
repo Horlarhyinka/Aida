@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "@fontsource/montserrat": "^5.1.0"
+    "@fontsource/montserrat": "^5.1.0",
+    "react-router-dom": "^6.28.0"
   }
 }
