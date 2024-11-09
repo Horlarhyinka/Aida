@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 
 # Rest imports 
 from rest_framework import status
@@ -14,12 +16,15 @@ from .models import UserProfileSchema, EmergencyReport, ChatMessage
 from api.util.token import generate_user_token, get_token_user_id
 from api.util.location import get_location_from_ip
 from api.auth.user import authenticate_user, IsAuthenticated
-from werkzeug.security import generate_password_hash
-from bson import ObjectId
 from api.firestore import firestore_db, firestore 
+from bson import ObjectId
+from bson.json_util import dumps
 from datetime import datetime
 from ipware import get_client_ip
+from werkzeug.security import generate_password_hash
 import requests
+import os
+
 
 client = mongodb_client
 
@@ -92,6 +97,22 @@ def make_emergency_report(self):
       "emergency_id": "abc123"
     }
     try:
+        #Handle uploaded images
+        if "image" in data.FILES:
+            image_file = data.FILES['image']
+            file_path = os.path.join('images', image_file.name)  
+            saved_path = default_storage.save(file_path, ContentFile(image_file.read()))
+            full_url = default_storage.url(saved_path)
+            data["image_url"]= full_url 
+
+        #Handle uploaded audio
+        if 'audio_file' in data.FILES:
+            audio_file = data.FILES['audio_file']
+            file_path = os.path.join('audio', audio_file.name)  # Define a folder within MEDIA_ROOT
+            saved_path = default_storage.save(file_path, ContentFile(audio_file.read()))
+            full_url = default_storage.url(saved_path)
+
+        #Handle location
         if data.get("location", None) == None or data.get("location", None) == None:
             ip_address = get_client_ip(requests)
             location = get_location_from_ip(ip_address)
@@ -110,6 +131,14 @@ def make_emergency_report(self):
         return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# @api_view(['GET'])
+# def get_all_emergencies(self):
+#     emergency_collection = firestore_db.collection("emergency_collection").stream()
+#     all_emergencies = [item.to_dict() for item in emergency_collection]
+    
+#     json_data = dumps(all_emergencies)
+
+#     return Response(results, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def respond_to_emergency(self, emergency_id):

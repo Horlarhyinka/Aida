@@ -41,6 +41,7 @@ class EmergencyReport(BaseModel):
     description: str
     latitude: float
     longitude: float
+    image_url: Optional[str] = None
     remark: str
     is_active: bool
     diagnosis: Optional[str] = None
