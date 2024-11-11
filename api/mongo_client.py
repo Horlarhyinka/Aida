@@ -1,12 +1,12 @@
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-
+from django.conf import settings
 
 
 
 # Create a new client and connect to the server
 def create_client():
-    uri = "mongodb+srv://blacac3:nyyD5LJ1hHqTyWbu@aida-db.j2aje.mongodb.net/aida-db"
+    uri = settings.MONGO_URI
     try:
         client = MongoClient(uri, tls=True ,server_api=ServerApi('1'))
         print('connected to mongo client...')

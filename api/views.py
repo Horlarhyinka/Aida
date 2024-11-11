@@ -26,7 +26,7 @@ def index(self):
         return Response({"error":"Authentication required"}, status=status.HTTP_401_UNAUTHORIZED)
     try:
         user_id = get_token_user_id(self)
-    except:
+    except Exception:
         return Response({"error":"Token not found"}, status=status.HTTP_401_UNAUTHORIZED)
     vol_collection = client["aida-db"]["volunteers"]
     user = vol_collection.find_one({"_id":ObjectId(user_id)})
