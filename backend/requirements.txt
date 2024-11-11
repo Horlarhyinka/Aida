@@ -1,0 +1,19 @@
+django==5.1.1
+djangorestframework
+djangorestframework-simplejwt
+dj-database-url
+psycopg2-binary
+django-environ
+drf-yasg
+python-dateutil
+pydantic==2.9.2
+requests
+ipstack
+django-ipware
+
+# MongoDB
+pymongo
+# AWS SDK
+boto3
+firebase-admin
+werkzeug

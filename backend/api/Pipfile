@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==5.1.1"
+djangorestframework = "*"
+djangorestframework-simplejwt = "*"
+dj-database-url = "*"
+psycopg2-binary = "*"
+django-environ = "*"
+drf-yasg = "*"
+python-dateutil = "*"
+pydantic = "==2.9.2"
+pymongo = "*"
+boto3 = "*"
+firebase-admin = "*"
+werkzeug = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.12"
