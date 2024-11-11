@@ -299,4 +299,11 @@ class chat_messages(APIView):
         emergency_ref.collection('chat_messages').add(valid_message)
         
         return Response({"message":"Message sent successfully"}, status=status.HTTP_200_OK)
-        
+
+
+# Pending implementations
+# ---------------- Email Verification---------------------
+
+# ---------------- Handling Credential file upload for registration ---------------------
+
+ 
