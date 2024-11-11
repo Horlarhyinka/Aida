@@ -10,12 +10,12 @@ interface Prop extends StackProps{
 
 const NavProfile = (prop: Prop) =>{
     const {avatar, name, userId, skill, ...rest} = prop
-    console.log({userId})
-    return <HStack px={'40px'} spacing={'12px'} {...rest} bg={'primary.200'} borderRight={'4px solid primary.500'}  >
-        <Avatar name={name} size={'lg'} src={avatar} />
+    const href = window.location.href
+    return <HStack as={'a'} href={`/users/${userId}`}  px={'40px'} spacing={'12px'} borderRight={href.includes('users/'+userId)?'4px': 'none'} bg={'primary.200'} borderColor={'primary.500'} {...rest}  >
+        <Avatar bg={'primary.500'} name={name} size={'lg'} src={avatar} />
         <VStack py={'29px'} spacing={'4px'} align={'left'} >
             <Text fontWeight={'500'} color={'primary.500'} fontSize={'20px'} >{name}</Text>
-            <Text fontWeight={'400'} fontSize={'1rem'} color={'gray.200'} >{skill}</Text>
+            <Text fontWeight={'400'} fontSize={'1rem'} color={'gray.200'} >{skill?.replace('_', " ")}</Text>
         </VStack>
     </HStack>
 }

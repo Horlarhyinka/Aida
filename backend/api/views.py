@@ -55,14 +55,15 @@ def register(self):
     vol_collection = client["aida-db"]["volunteers"]
     data = self.data
     email = data.get("email").lower()
-    hashed_password = generate_password_hash(data["password"])
-    data["password"] = hashed_password
-    
-
+    password = data["password"]
+    if not email or not password:
+        return Response({"error": "Email and Password is required"}, status=status.HTTP_404_NOT_FOUND)
     # Checks
     if vol_collection.count_documents({"email":email}) != 0:
-        return Response({"error":"Email already exists"}, status=status.HTTP_409_CONFLICT)
+        return Response({"error":"Email is already registered"}, status=status.HTTP_409_CONFLICT)
 
+    hashed_password = generate_password_hash(password)
+    data["password"] = hashed_password
     try:
         validated_user = UserProfileSchema(**data).to_dict()
         vol_collection.insert_one(validated_user).inserted_id
@@ -77,9 +78,9 @@ def register(self):
 def login(self):
     data = self.data
     if not data['email'] or not data['password']:
-        return Response({'message':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message':'Email and password is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    user_id= authenticate_user(email = data["email"], password=data["password"])
+    user_id= authenticate_user(data["email"], password=data["password"])
     if user_id is None:
         return Response({'message':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -91,11 +92,7 @@ def login(self):
 @api_view(['POST'])
 def make_emergency_report(self):
     data = self.data
-    response = {
-      "message": "Emergency reported successfully.",
-      "emergency_id": "abc123"
-    }
-
+    response = {}
     try:
         #Handle uploaded images
         if "image" in data.FILES:
@@ -119,8 +116,6 @@ def make_emergency_report(self):
             if location:
                 data['longitude'] = location['longitude']
                 data['latitude'] = location['latitude']
-            
-
         new_report = EmergencyReport(**data)
         report_collection = client["aida-db"]["EmergencyReport"]
         emergency_id = report_collection.insert_one(new_report.to_dict()).inserted_id

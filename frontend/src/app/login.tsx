@@ -1,13 +1,45 @@
-import { Box, FormControl, Heading, HStack, Input, Stack, Text, VStack, Image, Button, Checkbox, FormLabel} from "@chakra-ui/react"
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Box, FormControl, Heading, HStack, Input, Text, VStack, Image, Button, } from "@chakra-ui/react"
 import logo from '../assets/svg/logo.svg'
 import auth_banner from '../assets/svg/auth_banner.svg'
-import fileLogo from '../assets/svg/file.svg'
+import { RefObject, useRef} from "react"
+import toast from "react-hot-toast"
+import axios from 'axios'
 
+const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL
 const Login = () =>{
     const placeholderStyle = {
         color: 'gray.50',
-        fontSize: '20px',
+        fontSize: '16px',
         fontWeight: '400'
+    }
+    const formRef = useRef() as RefObject<HTMLFormElement>
+    async function handleSubmit(){
+        const formData = new FormData(formRef.current!)
+        const data = Object.fromEntries(formData.entries())
+        const url = apiBaseUrl + "/auth/login"
+        try {
+
+        const response = await axios.post(url, {...data})
+        if(!response.status.toString().startsWith("2")){
+            //@ts-ignore
+            toast.error("authentication failed - " + response.data.message)
+            return
+        }
+        const { token, user } = response.data as {token: string, user: any}
+        localStorage.setItem('token', token) 
+        localStorage.setItem("user", JSON.stringify(user))
+        if(window.location.href.includes("login")){
+            window.location.assign("/dashboard")
+        }else{
+            window.location.reload()
+        }
+        } catch (error: any) {
+            console.log(error)
+            toast.error(error.response?.data?.message || error.message || 'Login failed')
+            formRef.current!.reset()
+        }
     }
     return <HStack px={'14px'} spacing={'86px'} py={'24px'} alignItems={'flex-start'} w='100%' >
         <Box maxW={'718px'} textAlign={'center'} pos={'relative'} alignItems={"center"} alignContent={"center"} boxSizing="border-box" bgColor={'primary.500'} rounded={'1rem'} h={'100vh'} w={'45%'} >
@@ -16,40 +48,20 @@ const Login = () =>{
         </Box>
         <VStack maxW={'542px'} w={'45%'} verticalAlign={'top'} alignItems={'flex-start'}  >
             <VStack align={'left'} spacing={'12px'} mt={'36px'}  >
-                <Heading textAlign={'left'} fontSize={'3rem'} color={'gray.200'} fontWeight={700} >Register</Heading>
-                <Text fontSize={'20px'} fontWeight={400} color={'gray.100'} >Already have an account? <Text as={"a"} color={'primary.500'} href="/login" >Log in</Text></Text>
+                <Heading textAlign={'left'} fontSize={'3rem'} color={'gray.200'} fontWeight={700} >Sign in</Heading>
+                <Text fontSize={'20px'} fontWeight={400} color={'gray.100'} >I don't have have an account? <Text as={"a"} color={'primary.500'} href="/register" >Register</Text></Text>
             </VStack>
-            <FormControl mt={'80px'} >
+            <FormControl  as='form' ref={formRef} mt={'80px'} >
             <VStack spacing={'20px'} >
-
-            
-                <Stack w={'100%'} direction={"row"} spacing={'20px'} >
-                    <Input _placeholder={placeholderStyle} bg={'primary.100'} border={'none'} h='60px' name="firstName" placeholder="First Name" />
-                    <Input _placeholder={placeholderStyle} bg='primary.100' border={'none'} h='60px' name="lasttName" placeholder="Last Name" />
-                </Stack>
             <Input _placeholder={placeholderStyle} bg={'primary.100'} border={'none'}  h='60px' name="email" placeholder="Email Address" />
-            <Input _placeholder={placeholderStyle} bg={'primary.100'} border={'none'}  h='60px' name="Password" placeholder="Enter Password" />
-            <Input _placeholder={placeholderStyle} bg={'primary.100'} border={'none'}  h='60px' name="experience" placeholder="Medical Experience e.g Pediatrician" />
-            <Input _placeholder={placeholderStyle} bg={'primary.100'} border={'none'}  h='60px' name="experienceYears" placeholder="Years of Experience" />
-            </VStack>
-            <Input type="file" display={'none'} id="kyc" name="kyc" />
-            <HStack alignContent={'flex-start'} mt='20px' spacing={'30px'} w={'100%'} boxSizing="border-box" bg={'primary.100'} rounded={'0.5rem'} px={'18px'} py={'12px'} >
-            <FormLabel htmlFor="kyc" >
-            <Image  src={fileLogo} alt="" />
-            </FormLabel>
-            <VStack align={'left'} textAlign={'left'} color={'gray.50'} >
-                <Text>Upload Credentials</Text>
-                <Text>Your Credentials are secure and are only used for verification</Text>
-            </VStack>
-            <FormLabel htmlFor="kyc" >
-            <Button w='96px' h='34px' color={'#2632387F'} px={'12px'} py='6px' fontWeight={380} bg={'none'} borderWidth={'0.5px'} borderColor={'gray.50'} fontSize={'14px'} rounded={'1rem'} >Browse</Button>
-           
-            </FormLabel> </HStack>
-            <HStack align={'flex-start'} alignItems={'flex-start'} mt={'20px'} >
-                <Checkbox mt={'5px'} />
-                <Text textAlign={'left'} fontSize={'18px'} color={'gray.200'} >I agree to Aider’s Volunteer <Text as={'a'} color={'primary.500'} >Terms</Text>, <Text as={'a'} color={'primary.500'} >Privacy Policy</Text >, and <Text as={'a'} color={'primary.500'} >Code of Conduct</Text>.</Text>
-            </HStack>
-            <Button mt={'40px'} w={'100%'} h='60px' color={'white'} bg={'primary.500'} >Continue</Button>
+            <Input type="password" _placeholder={placeholderStyle} bg={'primary.100'} border={'none'}  h='60px' name="password" placeholder="Enter Password" />
+        </VStack>
+            <Button 
+            onClick={async(e)=>{
+                e.preventDefault()
+                await handleSubmit()
+            }}
+            mt={'40px'} w={'100%'} h='60px' fontSize={'20px'} fontWeight={'400'} color={'white'} bg={'primary.500'} >Continue</Button>
             </FormControl>
         </VStack>
     </HStack>

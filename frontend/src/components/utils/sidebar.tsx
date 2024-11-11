@@ -9,13 +9,12 @@ import settingsNavIcn from '../../assets/svg/nav/setting.svg'
 import helpNavIcn from '../../assets/svg/nav/help.svg'
 import reportNavIcn from '../../assets/svg/nav/report.svg'
 import NavProfile from "./nav-profile"
-import { dummyUser } from "../../assets/data/user"
 
 
 const SideBar = () =>{
 
     const nav_itemsA = [
-        {label: 'Emergencies', path: '/emergencies', icon: emergencyNavIcn},
+        {label: 'Emergencies', path: '/dashboard', icon: emergencyNavIcn},
         {label: 'Learning', path: '/learning', icon: learningNavIcn},
         {label: 'Rewards', path: '/rewards', icon: rewardsNavIcn},
         {label: 'Documentation', path: '/documentation', icon: documentationNavIcn}
@@ -26,6 +25,9 @@ const SideBar = () =>{
         {label: 'Help center', path: '/help', icon: helpNavIcn},
         {label: 'Report', path: '/report', icon: reportNavIcn}
     ]
+
+    const rawUser = localStorage.getItem("user")
+    const user = JSON.parse(rawUser!)
     return <VStack bg={'white'} spacing={'184px'} align={'left'} w='350px' h='100vh' py='48px' borderRight={'4px solid #2196F31A'} pos={'fixed'} >
         <VStack spacing={'48px'} align={'left'} >
             <Box w='100%' textAlign={'left'} >
@@ -59,10 +61,10 @@ const SideBar = () =>{
                      />)
                 }
             <NavProfile 
-            name={dummyUser.name} 
-            avatar={dummyUser.avatar} 
-            userId={dummyUser._id} 
-            skill={dummyUser.skill}
+            name={user.lastName + " " + user.firstName} 
+            avatar={user.avatar} 
+            userId={user._id} 
+            skill={user.skill}
             w='100%'
 
              />
