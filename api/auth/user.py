@@ -7,10 +7,13 @@ from bson import ObjectId
 
 client = mongodb_client
 
-def authenticate_user(username, password) -> str | None:
+def authenticate_user(password, username = None, email = None):
     # Fetch the user from MongoDB
     volunteers_collection = client["aida-db"]["volunteers"] 
-    user = volunteers_collection.find_one({"username": username})
+    if username:
+        user = volunteers_collection.find_one({"username": username})
+    elif email:
+        user = volunteers_collection.find_one({"email": email})
     print(user)
     if not user or not check_password_hash(user["password"], password):
         return None

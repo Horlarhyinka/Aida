@@ -54,22 +54,28 @@ def register(self):
     #Initialization
     vol_collection = client["aida-db"]["volunteers"]
     data = self.data
-    username = data.get("username").lower()
+    email = data.get("email").lower()
     hashed_password = generate_password_hash(data["password"])
     data["password"] = hashed_password
+    
+    # Pending file implementations
+    # if "image" in data.FILES:
+    #     image_file = data.FILES['credential']
+    #     file_path = os.path.join('credentials', image_file.name)  
+    #     saved_path = default_storage.save(file_path, ContentFile(image_file.read()))
+    #     full_url = default_storage.url(saved_path)
+    #     data["image_url"]= full_url 
 
     # Checks
-    if vol_collection.count_documents({"username":username}) != 0:
-        return Response({"error":"Username already exists"}, status=status.HTTP_409_CONFLICT)
-    elif vol_collection.count_documents({"email":data.get("email")}) != 0:
-        return Response({"error":"email already exists"}, status=status.HTTP_409_CONFLICT)
+    if vol_collection.count_documents({"email":email}) != 0:
+        return Response({"error":"Email already exists"}, status=status.HTTP_409_CONFLICT)
 
     try:
         validated_user = UserProfileSchema(**data).to_dict()
         vol_collection.insert_one(validated_user).inserted_id
         return Response({"message":"Registered Successfully"}, status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error": "An error occured"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -77,10 +83,10 @@ def register(self):
 @api_view(['POST'])
 def login(self):
     data = self.data
-    if not data['username'] or not data['password']:
+    if not data['email'] or not data['password']:
         return Response({'message':'Missing data'}, status=status.HTTP_400_BAD_REQUEST)
 
-    user_id= authenticate_user(data["username"], password=data["password"])
+    user_id= authenticate_user(email = data["email"], password=data["password"])
     if user_id is None:
         return Response({'message':'User does not exist'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -96,6 +102,7 @@ def make_emergency_report(self):
       "message": "Emergency reported successfully.",
       "emergency_id": "abc123"
     }
+
     try:
         #Handle uploaded images
         if "image" in data.FILES:
@@ -128,7 +135,8 @@ def make_emergency_report(self):
         create_chat(str(emergency_id))
         return Response(response, status=status.HTTP_201_CREATED)
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        print(e)
+        return Response({"error":"A server error occurred"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 # @api_view(['GET'])
@@ -150,12 +158,13 @@ def respond_to_emergency(self, emergency_id):
     try:
         volunteer = client["aida-db"]["volunteers"].find_one({"_id":ObjectId(volunteer_id)})
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"An Error occurred"}, status=status.HTTP_400_BAD_REQUEST)
     # Check if Emergency exists
     try:
         emergency_ref = firestore_db.collection("emergency_collection").document(emergency_id)
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        print(e)
+        return Response({"error":"An Error occurred"}, status=status.HTTP_400_BAD_REQUEST)
     
     #Add volunteer to emergency responders (All responders are added or are part of the chat automatically) 
     volunteer_id=str(volunteer.pop("_id"))
@@ -186,8 +195,8 @@ def get_emergency_report(self, emergency_id):
         the_report = report.find_one({"_id":ObjectId(emergency_id)})
         the_report["_id"] = str(the_report['_id'])
         return Response(dict(the_report), status=status.HTTP_200_OK)
-    except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception:
+        return Response({"error":"An error occurred"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -204,7 +213,7 @@ def ai_response(self, emergency_id):
 
 
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error":"An Error Occurred."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
@@ -220,7 +229,8 @@ def responders_list(self, emergency_id):
             raise ValueError("Invalid Emergency ID received!")
         return Response(results, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        print(e)
+        return Response({"error":"An Error occurred"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["GET"])
 def get_chat_messages(self, emergency_id):
@@ -235,7 +245,8 @@ def get_chat_messages(self, emergency_id):
         totalCount = len(results) - 1
         return Response({"chat_messages":results, "totalCount":totalCount}, status=status.HTTP_200_OK)
     except Exception as e:
-        return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+        print(e)
+        return Response({"error":"An error occurred"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST"])
 def send_chat_message(self, emergency_id):
@@ -262,7 +273,8 @@ class chat_messages(APIView):
                 raise ValueError("Invalid Emergency ID received!")
             return Response(results, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error":f"{e}"}, status=status.HTTP_400_BAD_REQUEST)
+            print(e)
+            return Response({"error":"An Error occurred"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 

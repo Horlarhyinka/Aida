@@ -10,13 +10,13 @@ class UserProfileSchema(BaseModel):
     Schema representation for a user profile in MongoDB, with validation.
     """
 
-    username: str
     email: str
     password: str
     first_name: str
     last_name: str
     phone_number: str
     medical_qualifications: List[str]
+    years_of_experience: int
     longitude: float
     latitude: float
     admin_verification: bool = True
