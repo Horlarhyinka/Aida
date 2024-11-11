@@ -58,13 +58,6 @@ def register(self):
     hashed_password = generate_password_hash(data["password"])
     data["password"] = hashed_password
     
-    # Pending file implementations
-    # if "image" in data.FILES:
-    #     image_file = data.FILES['credential']
-    #     file_path = os.path.join('credentials', image_file.name)  
-    #     saved_path = default_storage.save(file_path, ContentFile(image_file.read()))
-    #     full_url = default_storage.url(saved_path)
-    #     data["image_url"]= full_url 
 
     # Checks
     if vol_collection.count_documents({"email":email}) != 0:

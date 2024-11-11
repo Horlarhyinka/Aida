@@ -43,6 +43,7 @@ class EmergencyReport(BaseModel):
     latitude: float
     longitude: float
     image_url: Optional[str] = None
+    audio_url: Optional[str] = None
     remark: str
     is_active: bool
     diagnosis: Optional[str] = None
