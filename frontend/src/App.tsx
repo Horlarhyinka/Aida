@@ -8,6 +8,7 @@ import Register from "./app/register";
 import EmergencyPreview from "./app/emergency-preview";
 import Profile from "./app/profile";
 import { Toaster } from "react-hot-toast";
+import LandingPage from "./app/LandingPage";
 
 function App() {
 
@@ -21,6 +22,8 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/emergencies/:id" element={<EmergencyPreview />} />
         <Route path="/users/:id" element={<Profile/>} />
+        <Route path="/" element={<LandingPage />} />
+
       </Routes>
       </BrowserRouter>
     </ChakraProvider>

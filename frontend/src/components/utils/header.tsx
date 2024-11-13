@@ -1,15 +1,16 @@
-import { HStack, Image, Text } from "@chakra-ui/react"
+import { HStack, Image, Text, Button } from "@chakra-ui/react"
+import logo from '../../assets/logo.svg'
 
 const Header = () =>{
-    const logo = '/assets/logo.svg'
-    return <HStack>
+    return <HStack className="justify-between" h="80px">
         <Image src={logo} alt="logo" />
-        <HStack>
-            <Text>Home</Text>
-            <Text>About Us</Text>
-            <Text>Turorials</Text>
-            <Text>Donate</Text>
+        <HStack spacing="50px" fontSize="20">
+            <Text color={""}>Home</Text>
+            <Text>How It Works</Text>
+            <Text>Features</Text>
+            <Text>Testimonials</Text>
         </HStack>
+        <Button color={'white'} bg={'secondary.200'}>Get Started</Button>
     </HStack>
 }
 
