@@ -10,7 +10,7 @@ const Header = () =>{
             <Text>Features</Text>
             <Text>Testimonials</Text>
         </HStack>
-        <Button color={'white'} bg={'secondary.200'}>Get Started</Button>
+        <Button color={'white'} bg={'secondary.200'} py="6">Get Started</Button>
     </HStack>
 }
 
