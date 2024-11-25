@@ -23,7 +23,7 @@ const LandingPage = () => {
       <section className="px-14 border-b-2 shadow-md border-white">
         <Header />
       </section>
-      <section id="section1">
+      <section id="home">
         <Center>
           <HStack py="8">
             <Image src={vector} alt="vector" mb="8" px-2 />
@@ -84,7 +84,7 @@ const LandingPage = () => {
         </Stack>
       </section>
 
-      <section id="section2">
+      <section id="howItWorks">
         <Image src="src/assets/img/Exclude.png" width="100%" className="" />
         <Stack py="8" className="">
           <HowItWorks />
@@ -132,10 +132,10 @@ const LandingPage = () => {
           </HStack>
         </Center>
       </section>
-      <section className="py-8" id="section3">
+      <section className="py-8" id="features">
         <Features />
       </section>
-      <section className="py-8 bg-[#2196f3]/5" id="section4">
+      <section className="py-8 bg-[#2196f3]/5" id="testimonials">
         <Testimonials />
       </section>
       <section className="py-48">
