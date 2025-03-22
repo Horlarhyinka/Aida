@@ -7,6 +7,7 @@ import {
   Center,
   Button,
   Heading,
+  Box
 } from "@chakra-ui/react";
 import vector from "../assets/img/vector.png";
 import aid from "../assets/img/aid.png";
@@ -16,14 +17,19 @@ import HowItWorks from "../components/howItWorks";
 import Features from "../components/features";
 import Testimonials from "../components/testimonial";
 import Footer from "../components/utils/footer";
+import ReportModal from "../components/modals/report-modal";
+import { useState } from "react";
 
 const LandingPage = () => {
+  const [reportModalOpen, setReportModalOpen] = useState(false)
+
+
   return (
     <div>
       <section className="px-14 border-b-2 shadow-md border-white">
         <Header />
       </section>
-      <section className="">
+      <section id="home">
         <Center>
           <HStack py="8">
             <Image src={vector} alt="vector" mb="8" px-2 />
@@ -40,14 +46,17 @@ const LandingPage = () => {
           </HStack>
         </Center>
         <HStack className="justify-between text-balance">
-          <Stack w="25%" px="14" fontSize="25" className="relative bottom-12">
+          <Stack
+           align={'left'} w="25%" px="14" fontSize="25" className="relative bottom-12">
             <Image src={aid} alt="First aid box" boxSize="16" />
             <Text color="gray.300" className="text-left">
               Aider can help you get in touch with the nearest aid{" "}
             </Text>
-            <Button bg="white" h="16" borderColor="black">
+            <Box textAlign={'left'} as='a' href="/register" >
+            <Button _hover={{color: 'white', bg: 'primary.400', border: 'none'}} w='100%' bg="white" h="16" borderColor="black">
               Become a Volunteer
             </Button>
+            </Box>
           </Stack>
           <HStack w="40%">
             <Image src={aiders} w="90%" alt="Aiders" />
@@ -63,9 +72,11 @@ const LandingPage = () => {
             <Text color="gray.300" className="text-right">
               Doctors and volunteers that are experienced in the field
             </Text>
-            <Button bg="secondary.200" h="16" color="white">
+            <ReportModal>
+            <Button onClick={()=>setReportModalOpen(!reportModalOpen)} bg="secondary.200" h="16" color="white">
               Report an Emergency
             </Button>
+            </ReportModal>
           </Stack>
         </HStack>
         <Stack bg="secondary.200">
@@ -84,7 +95,7 @@ const LandingPage = () => {
         </Stack>
       </section>
 
-      <section>
+      <section id="howItWorks">
         <Image src="src/assets/img/Exclude.png" width="100%" className="" />
         <Stack py="8" className="">
           <HowItWorks />
@@ -132,16 +143,16 @@ const LandingPage = () => {
           </HStack>
         </Center>
       </section>
-      <section className="py-8">
+      <section className="py-8" id="features">
         <Features />
       </section>
-      <section className="py-8 bg-[#2196f3]/5">
+      <section className="py-8 bg-[#2196f3]/5" id="testimonials">
         <Testimonials />
       </section>
       <section className="py-48">
         <Center>
           <HStack className="justify-between  text-start px-8  w-[80%]">
-            <Stack px="4" w="60%">
+            <Stack px="8" w="70%">
               <Text fontWeight="600" fontSize="36">
                 Join Our Community of life-savers today!
               </Text>
@@ -149,6 +160,7 @@ const LandingPage = () => {
                 Reinforce the mission and invite user to contribute to the
                 community safety
               </Text>
+              <Box as="a" href='/register' >
               <Button
                 w="20%"
                 bg="secondary.200"
@@ -158,6 +170,8 @@ const LandingPage = () => {
               >
                 Join Us
               </Button>
+
+              </Box>
             </Stack>
             <Image src="src/assets/img/victim.png" rounded="md" />
           </HStack>

@@ -9,6 +9,7 @@ import { skillOptions } from "../constants/options"
 import toast from "react-hot-toast"
 import { useRef, RefObject } from "react"
 import axios from 'axios'
+import { tokenName } from "../components/utils/factory"
 
 
 const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL
@@ -66,7 +67,7 @@ const Register = () =>{
             return
         }
         const { token, user } = response.data as {token: string, user: any}
-        localStorage.setItem('token', token) 
+        localStorage.setItem(tokenName, token) 
         localStorage.setItem("user", JSON.stringify(user))
         toast.success("Registration successful")
         if(window.location.href.includes("register")){

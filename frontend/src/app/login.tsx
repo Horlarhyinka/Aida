@@ -6,6 +6,7 @@ import auth_banner from '../assets/svg/auth_banner.svg'
 import { RefObject, useRef} from "react"
 import toast from "react-hot-toast"
 import axios from 'axios'
+import { tokenName } from "../components/utils/factory"
 
 const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL
 const Login = () =>{
@@ -28,7 +29,7 @@ const Login = () =>{
             return
         }
         const { token, user } = response.data as {token: string, user: any}
-        localStorage.setItem('token', token) 
+        localStorage.setItem(tokenName, token) 
         localStorage.setItem("user", JSON.stringify(user))
         if(window.location.href.includes("login")){
             window.location.assign("/dashboard")

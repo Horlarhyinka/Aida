@@ -1,7 +1,8 @@
-import { Box, Circle, HStack, Image, Text, VStack } from '@chakra-ui/react';
-import React, { Component, createRef } from 'react';
+import { Circle, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Component, createRef } from 'react';
 import pauseIcn from '../assets/svg/pause.svg';
 import playIcn from '../assets/svg/play.svg';
+import ReactWaves from '@dschoon/react-waves';
 
 interface CustomAudioPlayerProps {
   src: string;
@@ -32,14 +33,16 @@ class CustomAudioPlayer extends Component<CustomAudioPlayerProps, CustomAudioPla
     if (audio) {
       audio.playbackRate = this.state.playbackRate;
 
-      // Update duration and current time on load
       audio.onloadedmetadata = () => {
         this.setState({ duration: audio.duration });
       };
 
-      // Sync current time during playback
       audio.ontimeupdate = () => {
         this.setState({ currentTime: audio.currentTime });
+      };
+
+      audio.onended = () => {
+        this.setState({ isPlaying: false });
       };
     }
   }
@@ -58,67 +61,45 @@ class CustomAudioPlayer extends Component<CustomAudioPlayerProps, CustomAudioPla
     }
   };
 
-  changePlaybackRate = (rate: number) => {
-    const audio = this.audioRef.current;
-    if (audio) {
-      audio.playbackRate = rate;
-      this.setState({ playbackRate: rate });
-    }
-  };
-
-  handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = parseFloat(event.target.value);
-    const audio = this.audioRef.current;
-    if (audio) {
-      audio.currentTime = newTime;
-      this.setState({ currentTime: newTime });
-    }
-  };
 
   render() {
     const { src } = this.props;
-    const { 
-        // isPlaying, playbackRate, 
-        currentTime, duration } = this.state;
+    const { isPlaying} = this.state;
 
     return (
-        <VStack align={'left'} bg='white' color={'gray.200'} px='34px' rounded={8} py='12px' >
-          
-        <audio ref={this.audioRef} src={src} style={{ display: 'none' }} />
-        <HStack w='100%' justifyContent={'space-between'} >
-            <Text  fontSize={'1rem'} color={'gray.200'} fontWeight={600} >Voice Message</Text>
-            <HStack>
-                <Box onClick={()=>this.setState({playbackRate: 0.5})} borderWidth={'0.3px'} borderColor={'gray.200'} px={'10px'} bg={this.state.playbackRate == 0.5?'gray.100':''} py='6.5px' rounded={8} >
-                    <Text fontSize={'12px'} >
-                        0.5x
-                    </Text>
-                </Box>
-                <Box onClick={()=>this.setState({playbackRate: 1})}  borderWidth={'0.3px'} borderColor={'gray.200'} px={'10px'} bg={this.state.playbackRate == 1?'gray.100':''} py='6.5px' rounded={8} >
-                    <Text fontSize={'12px'} >
-                        1x
-                    </Text>
-                </Box>
-                <Box onClick={()=>this.setState({playbackRate: 2})}  borderWidth={'0.3px'} borderColor={'gray.200'} px={'10px'} bg={this.state.playbackRate == 2?'gray.100':''} py='6.5px' rounded={8} >
-                    <Text fontSize={'12px'} >
-                        2x
-                    </Text>
-                </Box>
-            </HStack>
+      <VStack align={'left'} bg='white' color={'gray.200'} px='34px' rounded={8} py='12px'>
+
+        <HStack w='100%' justifyContent={'space-between'}>
+          <Text fontSize={'1rem'} color={'gray.200'} fontWeight={600}>Voice Message</Text>
         </HStack>
+        
         <HStack>
-            <Circle onClick={this.togglePlayPause} p='8px' border={'0.5px solid black'} >
-                <Image fontSize={'20px'} src={!this.state.isPlaying?playIcn: pauseIcn} alt='pause/play' />
-            </Circle>
-            <input
-            type="range"
-            min="0"
-            max={duration}
-            value={currentTime}
-            onChange={this.handleTimeChange}
-            style={{ width: '100%' }}
+          <Circle onClick={this.togglePlayPause} p='8px' border={'0.5px solid black'}>
+            <Image fontSize={'20px'} src={!isPlaying ? playIcn : pauseIcn} alt='pause/play' />
+          </Circle>
+
+          {/* Audio Element */}
+          <audio ref={this.audioRef} src={src} />
+
+          {/* React Waves */}
+          <ReactWaves
+            audioFile={src}
+            className={"react-waves"}
+            options={{
+              barHeight: 2,
+              cursorWidth: 0,
+              height: 50,
+              hideScrollbar: true,
+              progressColor: "#1DA1F2",
+              responsive: true,
+              waveColor: "#D1D6DA",
+            }}
+            volume={1}
+            zoom={2}
+            playing={isPlaying} // Syncing with state
           />
-        </HStack>  
-        </VStack>
+        </HStack>
+      </VStack>
     );
   }
 }

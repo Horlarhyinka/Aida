@@ -1,6 +1,7 @@
 import { Button, HStack, StackProps, VStack, Text, Avatar, Image } from "@chakra-ui/react"
 import onSceneIcn from '../assets/svg/on-scene.svg'
 import messageIcn from '../assets/svg/message.svg'
+import { useNavigate } from "react-router-dom";
 
 interface Prop extends StackProps{
     name: string;
@@ -16,6 +17,7 @@ interface Prop extends StackProps{
 
 const EmergencyCard = (prop: Prop) =>{
     const {name, description, id, messageCount, avatars, onScene, responders, isActive, ...rest } = prop
+    const navigate = useNavigate()
     console.log({id})
     return <HStack 
     w='100%' 
@@ -23,6 +25,9 @@ const EmergencyCard = (prop: Prop) =>{
     py='14px'
     px='24px'
     justifyContent={'space-between'}
+    onClick={()=>{
+        navigate('/emergencies/'+id)
+    }}
 
     {...rest}>
         <VStack align={'left'} spacing={'20px'} >
@@ -35,7 +40,7 @@ const EmergencyCard = (prop: Prop) =>{
             <HStack>
             <HStack >
                 {
-                    avatars.map((href, i)=><Avatar ml={i==0?'0px': '-18px'} key={i} src={href} size={'xs'} />)
+                    avatars?.map((href, i)=><Avatar ml={i==0?'0px': '-18px'} key={i} src={href} size={'xs'} />)
                 }
             </HStack>
             <Text fontSize={'14px'} fontWeight={'400'} color={'gray.200'} >{responders} Responders</Text>

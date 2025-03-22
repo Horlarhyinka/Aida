@@ -7,7 +7,13 @@ const Testimonials = () => {
     <div>
       <Heading>Trusted by Our Users and Volunteers</Heading>
       <Center>
-        <Box display="grid" gridTemplateColumns="repeat(2, 1fr)" gap="6" p="16" className="w-[80%]">
+        <Box
+          display="grid"
+          gridTemplateColumns="repeat(2, 1fr)"
+          gap="6"
+          p="16"
+          className="w-[80%]"
+        >
           {testimonies.map((testimony, index) => (
             <Stack
               key={testimony.name}

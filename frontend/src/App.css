@@ -40,3 +40,27 @@
 .read-the-docs {
   color: #888;
 }
+
+.gm-ui-hover-effect {
+  border: none;
+}
+
+.gm-ui-hover-effect > span {
+  transform: scale(0.7);
+  border: none;
+  padding: 4px;
+  width: 14px;
+  height: 14px;
+  display: none;
+}
+
+.pane {
+  overflow: hidden;
+}
+
+.Resizer {
+  background: #ccc;
+  width: 2px;
+  cursor: col-resize;
+}
+

@@ -41,7 +41,7 @@ const SideBar = () =>{
                     key={i} 
                     icon={item.icon}
                     px='40px'
-                    py='0px'
+                    // py='0px'
                     spacing={'12px'}
 
                      />)
@@ -56,7 +56,7 @@ const SideBar = () =>{
                     key={i} 
                     icon={item.icon}
                     px='40px'
-                    py='0px'
+                    py='8px'
                     spacing={'12px'}
                      />)
                 }
