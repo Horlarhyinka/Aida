@@ -10,7 +10,6 @@ import { collection, onSnapshot } from "firebase/firestore"
 
 const ReportSuccessful = () =>{
     const {id} = useParams()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [messages, setMessages] = useState<any[]>([])
     useEffect(()=>{
         const path = `emergencies/${id}/inference-chats`
