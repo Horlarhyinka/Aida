@@ -6,13 +6,15 @@ import StatusCard from "../components/utils/status"
 // import dummyEmergencies from "../assets/data/emergencies"
 import EmergencyCard from "../components/emmergency-card"
 import { useEffect, useState } from "react";
-import { getUser } from "../utils/factory"
+import { getToken, getUser } from "../utils/factory";
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
 // const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL
 
 const Dashboard = () =>{
     const apiBaseUrl = import.meta.env.VITE_APP_API_BASE_URL
+    const navigate = useNavigate()
     const stats = [
         {
             label: 'Today\'s Emergency Report',
@@ -26,7 +28,14 @@ const Dashboard = () =>{
         }
     ]
 
-const user = getUser()
+
+    const user = getUser()
+    const token = getToken()
+useEffect(()=>{
+    if(!user || !token){
+        return navigate(-1)
+    }
+},[navigate, user, token])
 
 const [emergencies, setEmergencies] = useState<any[]>([])
 
