@@ -33,7 +33,7 @@ const Dashboard = () =>{
     const token = getToken()
 useEffect(()=>{
     if(!user || !token){
-        return navigate(-1)
+        return navigate('/register')
     }
 },[navigate, user, token])
 
