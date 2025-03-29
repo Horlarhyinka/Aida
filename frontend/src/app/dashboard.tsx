@@ -29,13 +29,13 @@ const Dashboard = () =>{
     ]
 
 
-    const user = getUser()
-    const token = getToken()
-useEffect(()=>{
-    if(!user || !token){
-        return navigate('/register')
-    }
-},[navigate, user, token])
+const user = getUser()
+const token = getToken()
+
+
+if(!user || !token){
+    navigate('/register')
+}
 
 const [emergencies, setEmergencies] = useState<any[]>([])
 
@@ -48,7 +48,6 @@ useEffect(()=>{
     })
     .catch(err=>{console.log({err})})
 }, [])
-
 
 
     
